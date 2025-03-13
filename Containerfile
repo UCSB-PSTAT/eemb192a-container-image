@@ -15,7 +15,7 @@ RUN conda install -y \
 #  bioconda::concoct \
   bioconda::metabat2 \
   bioconda::maxbin2 \
-  bioconda::dastk \
+  bioconda::das_tool \
 #  bioconda::checkm2 \
   bioconda::gtdbtk \
 #  bioconda::anvio \
