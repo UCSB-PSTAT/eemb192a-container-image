@@ -4,7 +4,7 @@ pipeline {
         upstream(upstreamProjects: 'UCSB-PSTAT GitHub/jupyter-base/main', threshold: hudson.model.Result.SUCCESS)
     }
     environment {
-        IMAGE_NAME = '<COURSE/IMAGE ID HERE>'
+        IMAGE_NAME = 'eemb192a'
     }
     stages {
         stage('Build Test Deploy') {
@@ -38,6 +38,21 @@ pipeline {
                 stage('Test') {
                     steps {
                         container('podman') {
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME fastqc --version' 
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME trimmomatic -version'
+                            // This is a test for BBTools
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME which conda_build.sh'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME megahit --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME spades.py --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME quast --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME bowtie2 --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME concoct --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME metabat --help'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME which run_MaxBin.pl'
+                            // This is a test for dastk
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME which ma_plot'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME concoct --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME concoct --version'
                             //sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME python -c "import <library>;"'
                             sh 'podman run -d --name=$IMAGE_NAME --rm --pull=never -p 8888:8888 localhost/$IMAGE_NAME start-notebook.sh --NotebookApp.token="jenkinstest"'
                             sh 'sleep 10 && curl -v http://localhost:8888/lab?token=jenkinstest 2>&1 | grep -P "HTTP\\S+\\s200\\s+[\\w\\s]+\\s*$"'
