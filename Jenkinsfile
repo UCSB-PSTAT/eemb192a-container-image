@@ -49,10 +49,15 @@ pipeline {
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME concoct --version'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME metabat --help'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME which run_MaxBin.pl'
-                            // This is a test for dastk
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME which ma_plot'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME concoct --version'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME concoct --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME DAS_Tool --version'
+                            // This is a test for gtdbtk
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME which download-db.sh'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME prodigal -v'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME prokka --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME DRAM.py -h'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME which checkm2'
+                            // This is a test for GToTree
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME which gtt-test.sh'
                             //sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME python -c "import <library>;"'
                             sh 'podman run -d --name=$IMAGE_NAME --rm --pull=never -p 8888:8888 localhost/$IMAGE_NAME start-notebook.sh --NotebookApp.token="jenkinstest"'
                             sh 'sleep 10 && curl -v http://localhost:8888/lab?token=jenkinstest 2>&1 | grep -P "HTTP\\S+\\s200\\s+[\\w\\s]+\\s*$"'
