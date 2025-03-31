@@ -43,6 +43,6 @@ RUN mkdir /data && \
     mamba run -n anvio-8 anvi-setup-scg-taxonomy && \
     mamba run -n anvio-8 anvi-setup-ncbi-cogs && \
     mamba run -n anvio-8 anvi-setup-pfams && \
-    mamba run -n anvio-8anvi-setup-kegg-data
+    mamba run -n anvio-8 anvi-setup-kegg-data
 
 USER $NB_USER
