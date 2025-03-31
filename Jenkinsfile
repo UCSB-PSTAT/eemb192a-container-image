@@ -55,7 +55,7 @@ pipeline {
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME prodigal -v'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME prokka --version'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME DRAM.py -h'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio-8 which checkm2'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME which checkm2'
                             // This is a test for GToTree
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME which gtt-test.sh'
                             //sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME python -c "import <library>;"'
