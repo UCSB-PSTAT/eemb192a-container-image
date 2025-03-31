@@ -4,8 +4,6 @@ MAINTAINER LSIT Systems <lsitops@lsit.ucsb.edu>
 
 USER root
 
-
-
 RUN conda install -y \
   bioconda::fastqc \
   bioconda::trimmomatic \
@@ -18,7 +16,6 @@ RUN conda install -y \
   bioconda::metabat2 \
   bioconda::maxbin2 \
   bioconda::das_tool \
-  bioconda::checkm2 \
   bioconda::gtdbtk \
 #  bioconda::anvio \
   bioconda::prodigal \
@@ -28,6 +25,9 @@ RUN conda install -y \
 
 # Need to reinstall java-jdk because of errors. 
 RUN conda remove --force -y java-jdk
+
+# Install checkm2 
+RUN mamba create -y --name checkm2 -c conda-forge -c bioconda checkm2
 
 # Install a new ENV for packages that require older Python
 RUN mamba create -y --name anvio-8 -c conda-forge -c bioconda python=3.10  sqlite=3.46 concoct prodigal idba mcl muscle=3.8.1551 famsa hmmer diamond blast megahit spades bowtie2 bwa graphviz "samtools>=1.9" trimal iqtree trnascan-se fasttree vmatch r-base r-tidyverse r-optparse r-stringi r-magrittr bioconductor-qvalue meme ghostscript nodejs=20.12.2 fastani; \
