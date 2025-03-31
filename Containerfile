@@ -32,7 +32,7 @@ RUN conda remove --force -y java-jdk
 # Install Anvi'o et al via PIP
 ARG MAMBA_DOCKERFILE_ACTIVATE=1
 
-RUN mamba create -y --name anvio-8 -c conda-forge -c bioconda python=3.10  sqlite=3.46 prodigal idba mcl muscle=3.8.1551 famsa hmmer diamond blast megahit spades bowtie2 bwa graphviz "samtools>=1.9" trimal iqtree trnascan-se fasttree vmatch r-base r-tidyverse r-optparse r-stringi r-magrittr bioconductor-qvalue meme ghostscript nodejs=20.12.2 fastani; \
+RUN mamba create -y --name anvio-8 -c conda-forge -c bioconda python=3.10  sqlite=3.46 concoct checkm2 prodigal idba mcl muscle=3.8.1551 famsa hmmer diamond blast megahit spades bowtie2 bwa graphviz "samtools>=1.9" trimal iqtree trnascan-se fasttree vmatch r-base r-tidyverse r-optparse r-stringi r-magrittr bioconductor-qvalue meme ghostscript nodejs=20.12.2 fastani; \
     curl -L https://github.com/merenlab/anvio/releases/download/v8/anvio-8.tar.gz --output anvio-8.tar.gz ; \
     mamba run -n anvio-8 pip install anvio-8.tar.gz 
 
