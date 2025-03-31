@@ -36,10 +36,13 @@ RUN mamba create -y --name anvio-8 -c conda-forge -c bioconda python=3.10  sqlit
 
 # Setup python db packages: 
 RUN mkdir /data && \
-    DRAM-setup.py prepare_databases --output_dir /data/ && \
+    #DRAM-setup.py prepare_databases --output_dir /data/ && \
+    quast-download-gridss && \
+    quast-download-silva && \
+    quast-download-busco && \
     mamba run -n anvio-8 anvi-setup-scg-taxonomy && \
     mamba run -n anvio-8 anvi-setup-ncbi-cogs && \
     mamba run -n anvio-8 anvi-setup-pfams && \
-    mamba run -n anvio-8anvi-setup-kegg-data 
+    mamba run -n anvio-8anvi-setup-kegg-data
 
 USER $NB_USER
