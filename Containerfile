@@ -12,27 +12,60 @@ RUN conda install -y \
   bioconda::spades \
   bioconda::quast \
   bioconda::bowtie2 \
-#  bioconda::concoct \
   bioconda::metabat2 \
   bioconda::maxbin2 \
   bioconda::das_tool \
   bioconda::gtdbtk \
-#  bioconda::anvio \
   bioconda::prodigal \
   bioconda::prokka \
   bioconda::dram \
-  bioconda::gtotree
+  bioconda::gtotree && \
+  conda clean --all
 
-# Need to reinstall java-jdk because of errors. 
-RUN conda remove --force -y java-jdk
-
-# Install checkm2 
-RUN mamba create -y --name checkm2 -c conda-forge -c bioconda checkm2
+# Install checkm2 in it's own conda env
+RUN conda create -y --name checkm2 -c conda-forge -c bioconda checkm2 && conda clean --all
 
 # Install a new ENV for packages that require older Python
-RUN mamba create -y --name anvio-8 -c conda-forge -c bioconda python=3.10  sqlite=3.46 concoct prodigal idba mcl muscle=3.8.1551 famsa hmmer diamond blast megahit spades bowtie2 bwa graphviz "samtools>=1.9" trimal iqtree trnascan-se fasttree vmatch r-base r-tidyverse r-optparse r-stringi r-magrittr bioconductor-qvalue meme ghostscript nodejs=20.12.2 fastani; \
-    curl -L https://github.com/merenlab/anvio/releases/download/v8/anvio-8.tar.gz --output anvio-8.tar.gz ; \
-    mamba run -n anvio-8 pip install anvio-8.tar.gz 
+RUN conda create -y --name anvio \
+    -c conda-forge \
+    -c bioconda \
+    python=3.10 \
+    sqlite=3.46 \
+    prodigal \
+    idba \
+    mcl \
+    muscle=3.8.1551 \
+    famsa \
+    hmmer \
+    diamond \
+    blast \
+    megahit \
+    spades \
+    bowtie2 \
+    bwa \
+    graphviz \
+    "samtools>=1.9" \
+    trimal \
+    iqtree \
+    trnascan-se \
+    fasttree \
+    vmatch \
+    r-base \
+    r-tidyverse \
+    r-optparse \
+    r-stringi \
+    r-magrittr \
+    bioconductor-qvalue \
+    meme \
+    ghostscript \
+    nodejs=20.12.2 \
+    llvmlite \
+    numba && \
+    curl -L -O https://github.com/merenlab/anvio/releases/download/v9/anvio-9.tar.gz && \
+    conda run -n anvio pip install anvio-9.tar.gz && \
+    rm anvio-9.tar.gz && \
+    conda clean --all
+    
 
 # Setup python db packages: 
 RUN mkdir /data && \
@@ -40,9 +73,9 @@ RUN mkdir /data && \
     quast-download-gridss && \
     quast-download-silva && \
     quast-download-busco && \
-    mamba run -n anvio-8 anvi-setup-scg-taxonomy && \
-    mamba run -n anvio-8 anvi-setup-ncbi-cogs && \
-    mamba run -n anvio-8 anvi-setup-pfams && \
-    mamba run -n anvio-8 anvi-setup-kegg-data
+    mamba run -n anvio anvi-setup-scg-taxonomy && \
+    mamba run -n anvio anvi-setup-ncbi-cogs && \
+    mamba run -n anvio anvi-setup-pfams && \
+    mamba run -n anvio anvi-setup-kegg-data
 
 USER $NB_USER
