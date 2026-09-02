@@ -4,24 +4,6 @@ MAINTAINER LSIT Systems <lsitops@lsit.ucsb.edu>
 
 USER root
 
-RUN conda install -y \
-  bioconda::fastqc \
-  bioconda::trimmomatic \
-  agbiome::bbtools \
-  bioconda::megahit \
-  bioconda::spades \
-  bioconda::quast \
-  bioconda::bowtie2 \
-  bioconda::metabat2 \
-  bioconda::maxbin2 \
-  bioconda::das_tool \
-  bioconda::gtdbtk \
-  bioconda::prodigal \
-  bioconda::prokka \
-  bioconda::dram \
-  bioconda::gtotree && \
-  conda clean --all
-
 # Install checkm2 in it's own conda env
 RUN conda create -y --name checkm2 -c conda-forge -c bioconda checkm2 && conda clean --all
 
@@ -60,6 +42,17 @@ RUN conda create -y --name anvio \
     ghostscript \
     nodejs=20.12.2 \
     llvmlite \
+    fastqc \
+    trimmomatic \
+    bbtools \
+    quast \
+    metabat2 \
+    maxbin2 \
+    das_tool \
+    gtdtk \
+    prokka \
+    dram \
+    gtotree \
     numba && \
     curl -L -O https://github.com/merenlab/anvio/releases/download/v9/anvio-9.tar.gz && \
     conda run -n anvio pip install anvio-9.tar.gz && \
@@ -70,12 +63,12 @@ RUN conda create -y --name anvio \
 # Setup python db packages: 
 RUN mkdir /data && \
     #DRAM-setup.py prepare_databases --output_dir /data/ && \
-    quast-download-gridss && \
-    quast-download-silva && \
-    quast-download-busco && \
-    mamba run -n anvio anvi-setup-scg-taxonomy && \
-    mamba run -n anvio anvi-setup-ncbi-cogs && \
-    mamba run -n anvio anvi-setup-pfams && \
-    mamba run -n anvio anvi-setup-kegg-data
+    conda run -n anvio quast-download-gridss && \
+    conda run -n anvio quast-download-silva && \
+    conda run -n anvio quast-download-busco && \
+    conda run -n anvio anvi-setup-scg-taxonomy && \
+    conda run -n anvio anvi-setup-ncbi-cogs && \
+    conda run -n anvio anvi-setup-pfams && \
+    conda run -n anvio anvi-setup-kegg-data
 
 USER $NB_USER
