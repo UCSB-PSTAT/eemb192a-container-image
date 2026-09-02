@@ -39,26 +39,26 @@ pipeline {
                 stage('Test') {
                     steps {
                         container('podman') {
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio fastqc --version' 
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio trimmomatic -version'
-                            // This is a test for BBTools
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio which conda_build.sh'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio megahit --version'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio spades.py --version'
+                            // --- BIOTOOLS ENVIRONMENT TESTS ---
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n biotools fastqc --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n biotools trimmomatic -version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n biotools which conda_build.sh'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n biotools prokka --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n biotools DRAM.py -h'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n biotools which download-db.sh'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n biotools which gtt-test.sh'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n biotools checkm2 --version'
+                            // --- ANVIO ENVIRONMENT TESTS ---
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio quast --version'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio bowtie2 --version'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio concoct --version'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio metabat --help'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio which run_MaxBin.pl'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio DAS_Tool --version'
-                            // This is a test for gtdbtk
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio which download-db.sh'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio prodigal -v'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio prokka --version'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio DRAM.py -h'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n checkm2 which checkm2'
-                            // This is a test for GToTree
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio which gtt-test.sh'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio megahit --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio spades.py --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio bowtie2 --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME mamba run -n anvio concoct --version'
+                            // --- JUPYTER NOTEBOOK TESTS ---
                             //sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME python -c "import <library>;"'
                             sh 'podman run -d --name=$IMAGE_NAME --rm --pull=never -p 8888:8888 localhost/$IMAGE_NAME start-notebook.sh --NotebookApp.token="jenkinstest"'
                             retry(6) { sh 'sleep 10 && curl -v http://localhost:8888/lab?token=jenkinstest 2>&1 | grep -P "HTTP\\S+\\s200\\s+[\\w\\s]+\\s*$"' }
