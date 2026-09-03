@@ -6,15 +6,17 @@ USER root
 
 # Install a new ENV for packages that require older Python
 RUN conda create -y -v -n biotools -c agbiome -c bioconda -c conda-forge \
-    fastqc \
-    checkm2 \
-    openjdk \
-    trimmomatic \
     bbtools \
-    prokka \
+    checkm2 \
+    concoct \
     dram \
-    bioconda::gtdbtk\
-    gtotree && \
+    fastqc \
+    gtdbtk \
+    gtotree \
+    openjdk \
+    prokka \
+    "setuptools<81" \
+    trimmomatic && \
     conda remove --force --yes --name biotools java-jdk && \
     mamba create -y -v --name anvio \
     -c conda-forge \
@@ -64,15 +66,21 @@ RUN conda create -y -v -n biotools -c agbiome -c bioconda -c conda-forge \
     fix-permissions /opt/conda
 
 
-# Setup python db packages: 
-RUN mkdir /data && \
+# Setup python db packages- quast 404 and DRAM-setup.py is over 50 gigs. Better suited for a shared PVC. 
+# By default anvio downloads to t a hidden directory in ~ - ie /home/jovyan/.anvio/ 
+# That won't persist for JupyterHub so sthere's no point in setting this here. 
+# We'll leave it commented out so it's easy for users that want to build it on their own to do.
+# Set the environment variable so anvio can access and store it in a PVC or known location.
+ENV ANVIO_DATA_DIR=/data
+RUN mkdir -p /data && touch /data/.keep && \
     #conda run -n biotools DRAM-setup.py prepare_databases --output_dir /data/ && \
-    conda run -n anvio quast-download-gridss && \
-    conda run -n anvio quast-download-silva && \
-    conda run -n anvio quast-download-busco && \
-    conda run -n anvio anvi-setup-scg-taxonomy && \
-    conda run -n anvio anvi-setup-ncbi-cogs && \
-    conda run -n anvio anvi-setup-pfams && \
-    conda run -n anvio anvi-setup-kegg-data
+    #conda run -n anvio quast-download-gridss && \
+    #conda run -n anvio quast-download-silva && \
+    #conda run -n anvio quast-download-busco && \
+    #conda run -n anvio anvi-setup-scg-taxonomy && \
+    #conda run -n anvio anvi-setup-ncbi-cogs && \
+    #conda run -n anvio anvi-setup-pfams && \
+    #conda run -n anvio anvi-setup-kegg-data && \
+    chown -R $NB_USER:$NB_USER /data 
 
 USER $NB_USER
