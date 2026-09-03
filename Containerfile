@@ -81,6 +81,6 @@ RUN mkdir -p /data && touch /data/.keep && \
     #conda run -n anvio anvi-setup-ncbi-cogs && \
     #conda run -n anvio anvi-setup-pfams && \
     #conda run -n anvio anvi-setup-kegg-data && \
-    chown -R $NB_USER:$NB_USER /data 
+    chown -R $NB_USER:$NB_GROUP /data 
 
 USER $NB_USER
