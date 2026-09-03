@@ -15,8 +15,7 @@ RUN conda create -y -v -n biotools -c agbiome -c bioconda -c conda-forge \
     dram \
     bioconda::gtdbtk\
     gtotree && \
-    #conda create -y -v --name gtdtk -c conda-forge -c bioconda\
-    #gtdtk &&\
+    conda remove --force --yes --name biotools java-jdk && \
     mamba create -y -v --name anvio \
     -c conda-forge \
     -c bioconda \
@@ -57,16 +56,17 @@ RUN conda create -y -v -n biotools -c agbiome -c bioconda -c conda-forge \
     r-magrittr \
     numba \
     das_tool && \
-    #mamba create -y --name checkm2 -c conda-forge -c bioconda checkm2 && \
     curl -L -O https://github.com/merenlab/anvio/releases/download/v9/anvio-9.tar.gz && \
     conda run -n anvio pip install anvio-9.tar.gz && \
     rm anvio-9.tar.gz && \
-    mamba clean -afy
-    
+    mamba clean -afy && \
+    ln -s /opt/conda/envs/biotools/lib/jvm/bin/java /opt/conda/envs/biotools/bin/java && \
+    fix-permissions /opt/conda
+
 
 # Setup python db packages: 
 RUN mkdir /data && \
-    #DRAM-setup.py prepare_databases --output_dir /data/ && \
+    #conda run -n biotools DRAM-setup.py prepare_databases --output_dir /data/ && \
     conda run -n anvio quast-download-gridss && \
     conda run -n anvio quast-download-silva && \
     conda run -n anvio quast-download-busco && \
