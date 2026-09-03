@@ -48,6 +48,7 @@ pipeline {
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME conda run -n biotools which download-db.sh'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME conda run -n biotools which gtt-test.sh'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME conda run -n biotools checkm2 --version'
+                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME conda run -n biotools concoct --version'
                             // --- ANVIO ENVIRONMENT TESTS ---
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME conda run -n anvio quast --version'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME conda run -n anvio metabat --help'
@@ -57,7 +58,6 @@ pipeline {
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME conda run -n anvio megahit --version'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME conda run -n anvio spades.py --version'
                             sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME conda run -n anvio bowtie2 --version'
-                            sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME conda run -n anvio concoct --version'
                             // --- JUPYTER NOTEBOOK TESTS ---
                             //sh 'podman run -it --rm --pull=never localhost/$IMAGE_NAME python -c "import <library>;"'
                             sh 'podman run -d --name=$IMAGE_NAME --rm --pull=never -p 8888:8888 localhost/$IMAGE_NAME start-notebook.sh --NotebookApp.token="jenkinstest"'
