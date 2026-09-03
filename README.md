@@ -28,3 +28,16 @@ conda deactivate
 ```
 
 > **💡 JupyterLab Tip:** If you are working in a notebook, you can skip the terminal! Simply use the **Kernel** dropdown menu in the top-right corner of your browser to switch between the `anvio`, `biotools`, or `checkm2` environments.
+
+## ⮋ Downloading Databases and Datasets
+There is a `/data` directory preloaded with a some data, but all of them can be obtained by targeting a shared volume:
+```bash
+conda run -n biotools DRAM-setup.py prepare_databases --output_dir /data/ && \
+conda run -n anvio quast-download-gridss && \
+conda run -n anvio quast-download-silva && \
+conda run -n anvio quast-download-busco && \
+conda run -n anvio anvi-setup-scg-taxonomy && \
+conda run -n anvio anvi-setup-ncbi-cogs && \
+conda run -n anvio anvi-setup-pfams && \
+conda run -n anvio anvi-setup-kegg-data
+```
