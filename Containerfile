@@ -8,6 +8,7 @@ USER root
 RUN conda create -y -v -n biotools -c agbiome -c bioconda -c conda-forge \
     fastqc \
     checkm2 \
+    openjdk \
     trimmomatic \
     bbtools \
     prokka \
